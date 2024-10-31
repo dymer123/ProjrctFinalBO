@@ -20,6 +20,9 @@ public class VideojuegoManager {
         videojuegos = new ArrayList<>();
         inicializarVideojuegos();
     }
+
+
+
     private void inicializarVideojuegos() {
         añadirVideojuego("The Legend of Zelda: Breath of the Wild", "Aventura", "Switch", "Nintendo", "Nintendo",
                 true, true, 59.99, 10.0f, "+7", Calendar.getInstance(), 1, 50, "Basilisk");
@@ -29,9 +32,6 @@ public class VideojuegoManager {
 
         añadirVideojuego("Cyberpunk 2077", "RPG", "PC", "CD Projekt Red", "CD Projekt",
                 true, true, 59.99, 7.5f, "+18", Calendar.getInstance(), 1, 40, "REDengine 4");
-
-        añadirVideojuego("FIFA 21", "Deportes", "Multi", "EA Sports", "EA",
-                true, false, 59.99, 8.0f, "+3", Calendar.getInstance(), 4, 20, "Frostbite");
 
         añadirVideojuego("Minecraft", "Sandbox", "Multi", "Mojang Studios", "Mojang",
                 true, false, 26.95, 9.0f, "TP", Calendar.getInstance(), 1, 100, "Java");

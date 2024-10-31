@@ -12,6 +12,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.dam2024m8uf1_tfinal.drivera.Singletoon.Videojuego
 import com.dam2024m8uf1_tfinal.drivera.Singletoon.VideojuegoManager
 import java.text.SimpleDateFormat
 import java.util.Calendar
@@ -88,13 +89,16 @@ class Menu2 : AppCompatActivity() {
             // Cargar detalles del videojuego
             val videojuego = VideojuegoManager.getInstance().obtenerVideojuegoPorId(id)
             videojuego?.let { v ->
-                etPlataforma.setText(v.plataforma)
-                etPublicador.setText(v.publicador)
-                cbModoHistoria.isChecked = v.modoHistoria
-                etFechaLanzamiento.setText(dateToString(v.fechaLanzamiento)) // Asegúrate de que v.fechaLanzamiento sea un Calendar o String
-                etNumeroJugadores.setText(v.numeroJugadores.toString())
-                etDuracionPromedio.setText(v.duracionPromedio.toString())
-                etMotorGrafico.setText(v.motorGrafico)
+                // Usar getters para establecer los valores en los EditTexts y CheckBox
+                etPlataforma.setText(v.getPlataforma())
+                etPublicador.setText(v.getPublicador())
+                cbModoHistoria.isChecked = v.isModoHistoria()
+                etFechaLanzamiento.setText(dateToString(v.getFechaLanzamiento())) // Asegúrate de que v.getFechaLanzamiento() devuelva un Calendar
+                etNumeroJugadores.setText(v.getNumeroJugadores().toString())
+                etDuracionPromedio.setText(v.getDuracionPromedio().toString())
+                etMotorGrafico.setText(v.getMotorGrafico())
+            } ?: run {
+                Toast.makeText(this, "No se encontró el videojuego.", Toast.LENGTH_SHORT).show()
             }
         }
     }
@@ -157,8 +161,6 @@ class Menu2 : AppCompatActivity() {
             Toast.makeText(this, "No se encontró un videojuego para actualizar.", Toast.LENGTH_SHORT).show()
         }
     }
-
-
 
     private fun mostrarDetalles() {
         currentVideojuegoId?.let { id ->

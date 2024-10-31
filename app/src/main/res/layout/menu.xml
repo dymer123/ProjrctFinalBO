@@ -5,9 +5,9 @@
     android:id="@+id/main"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:background="@drawable/fondo_menu"
+    android:background="@color/black"
     tools:context="com.dam2024m8uf1_tfinal.drivera.Menu"
-    android:alpha="0.8">
+    >
 
     <EditText
         android:id="@+id/etTitulo"

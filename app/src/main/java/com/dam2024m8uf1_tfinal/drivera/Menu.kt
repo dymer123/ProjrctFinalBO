@@ -9,10 +9,7 @@ import android.widget.CheckBox
 import android.widget.EditText
 import android.widget.Spinner
 import android.widget.Toast
-import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
-import androidx.core.view.ViewCompat
-import androidx.core.view.WindowInsetsCompat
 import com.dam2024m8uf1_tfinal.drivera.Singletoon.Videojuego
 import com.dam2024m8uf1_tfinal.drivera.Singletoon.VideojuegoManager
 
@@ -33,14 +30,7 @@ class Menu : AppCompatActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-        enableEdgeToEdge()
         setContentView(R.layout.menu)
-
-        ViewCompat.setOnApplyWindowInsetsListener(findViewById(R.id.main)) { v, insets ->
-            val systemBars = insets.getInsets(WindowInsetsCompat.Type.systemBars())
-            v.setPadding(systemBars.left, systemBars.top, systemBars.right, systemBars.bottom)
-            insets
-        }
 
         // Inicializar los componentes de la interfaz
         etTitulo = findViewById(R.id.etTitulo)
@@ -94,26 +84,49 @@ class Menu : AppCompatActivity() {
     private fun cargarVideojuego(id: Int?) {
         Log.d("Menu", "Cargando videojuego con ID: $id")
         id?.let {
-            val detalles = videojuegoManager.mostrarDetalles(it)
-            Log.d("Menu", "Detalles obtenidos: $detalles")
-            Toast.makeText(this, detalles, Toast.LENGTH_LONG).show()
+            val videojuego = videojuegoManager.obtenerVideojuegoPorId(it) // Obtén el objeto Videojuego por su ID
+            videojuego?.let { juego ->
+                // Mostrar información usando getters
+                etTitulo.setText(juego.getTitulo())
+                etPrecio.setText(juego.getPrecio().toString())
+                spGenero.setSelection(getGeneroPosition(juego.getGenero()))
+                etCalificacion.setText(juego.getCalificacion().toString())
+                etDesarrollador.setText(juego.getDesarrollador())
+                spClasificacionEdad.setSelection(getClasificacionEdadPosition(juego.getClasificacionEdad()))
+                cbMultijugador.isChecked = juego.isEsMultijugador()
+            } ?: run {
+                Toast.makeText(this, "No se encontró el videojuego.", Toast.LENGTH_SHORT).show()
+            }
         }
+    }
+
+    private fun getGeneroPosition(genero: String): Int {
+        val generos = arrayOf("Acción", "Aventura", "RPG", "Deportes", "Estrategia")
+        return generos.indexOf(genero)
+    }
+
+    private fun getClasificacionEdadPosition(clasificacion: String): Int {
+        val clasificaciones = arrayOf("TP", "+3", "+7", "+12", "+16", "+18")
+        return clasificaciones.indexOf(clasificacion)
     }
 
     private fun actualizarVideojuego() {
         val titulo = etTitulo.text.toString()
-        val precio = etPrecio.text.toString().toDoubleOrNull()
+        val precioStr = etPrecio.text.toString()
         val genero = spGenero.selectedItem.toString()
-        val calificacion = etCalificacion.text.toString().toFloatOrNull()
+        val calificacionStr = etCalificacion.text.toString()
         val desarrollador = etDesarrollador.text.toString()
         val clasificacionEdad = spClasificacionEdad.selectedItem.toString()
         val esMultijugador = cbMultijugador.isChecked // Ahora ya es Boolean
 
         // Validación de entradas
-        if (titulo.isBlank() || precio == null || genero.isBlank() || calificacion == null || desarrollador.isBlank()) {
+        if (titulo.isBlank() || precioStr.isBlank() || genero.isBlank() || calificacionStr.isBlank() || desarrollador.isBlank()) {
             Toast.makeText(this, "Por favor, complete todos los campos correctamente.", Toast.LENGTH_SHORT).show()
             return
         }
+
+        val precio = precioStr.toDoubleOrNull()
+        val calificacion = calificacionStr.toFloatOrNull()
 
         // Actualiza los atributos del videojuego
         currentVideojuegoId?.let { id ->
@@ -122,18 +135,18 @@ class Menu : AppCompatActivity() {
                 id,
                 titulo,
                 genero,
-                null,
+                null, // Aquí puedes pasar la plataforma si tienes
                 desarrollador,
-                null,
-                null,
-                null,
-                precio,
-                calificacion,
-                null,
-                null,
-                null,
+                null, // Aquí puedes pasar el año de lanzamiento si tienes
+                null, // Aquí puedes pasar el ID del desarrollador si tienes
+                null, // Aquí puedes pasar otros campos si tienes
+                precio ?: 0.0,
+                calificacion ?: 0f,
+                null, // Aquí puedes pasar el ID de la clasificación por edad si tienes
+                null, // Aquí puedes pasar la fecha de lanzamiento si tienes
+                null, // Aquí puedes pasar otros campos si tienes
                 if (esMultijugador) 1 else 0,
-                null
+                null  // Aquí puedes pasar otros campos si tienes
             )
 
             Toast.makeText(this, "Videojuego actualizado.", Toast.LENGTH_SHORT).show()
@@ -144,11 +157,14 @@ class Menu : AppCompatActivity() {
 
     private fun mostrarDetalles() {
         currentVideojuegoId?.let { id ->
-            val detalles = videojuegoManager.mostrarDetalles(id)
-            Log.i("DetallesVideojuego", detalles)
-            Toast.makeText(this, detalles, Toast.LENGTH_LONG).show()
-        } ?: run {
-            Toast.makeText(this, "No se encontró un videojuego para mostrar detalles.", Toast.LENGTH_SHORT).show()
+            val videojuego = videojuegoManager.obtenerVideojuegoPorId(id)
+            videojuego?.let { juego ->
+                val detalles = juego.mostrarDetalles() // Utiliza el método mostrarDetalles() de Videojuego
+                Log.i("DetallesVideojuego", detalles)
+                Toast.makeText(this, detalles, Toast.LENGTH_LONG).show()
+            } ?: run {
+                Toast.makeText(this, "No se encontró un videojuego para mostrar detalles.", Toast.LENGTH_SHORT).show()
+            }
         }
     }
 
@@ -156,6 +172,6 @@ class Menu : AppCompatActivity() {
     private fun añadirVideojuegoVacio() {
         val videojuegoVacio = Videojuego() // Crear un nuevo objeto Videojuego vacío
         videojuegoManager.añadirVideojuegoVacio() // Usa el método del VideojuegoManager para añadir el videojuego vacío
-        currentVideojuegoId = videojuegoVacio.id // Asignar el ID del nuevo videojuego vacío
+        currentVideojuegoId = videojuegoVacio.getId() // Asignar el ID del nuevo videojuego vacío
     }
 }

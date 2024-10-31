@@ -2,53 +2,64 @@ package com.dam2024m8uf1_tfinal.drivera
 
 import android.content.Intent
 import android.os.Bundle
+import android.view.View
 import android.widget.Button
-import android.widget.Toast
 import androidx.appcompat.app.AppCompatActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.dam2024m8uf1_tfinal.drivera.Singletoon.Videojuego
 import com.dam2024m8uf1_tfinal.drivera.Singletoon.VideojuegoManager
+import java.util.Calendar
 
 class MainActivity : AppCompatActivity() {
-    private lateinit var recyclerView: RecyclerView
-    private lateinit var btnAdd: Button
     private lateinit var videojuegoAdapter: VideojuegoAdapter
-    private lateinit var videojuegos: MutableList<Videojuego>
+    private lateinit var recyclerView: RecyclerView
+    private val videojuegoManager = VideojuegoManager.getInstance()
+    private val videojuegos = mutableListOf<Videojuego>() // Lista mutable para agregar elementos
 
-    @Override
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         setContentView(R.layout.activity_main)
 
+        // Inicializar RecyclerView
         recyclerView = findViewById(R.id.recyclerView)
-        btnAdd = findViewById(R.id.btnAdd)
-
-        // Inicializar la lista de videojuegos
-        videojuegos = VideojuegoManager.getInstance().getVideojuegos() // Método que devuelve la lista de videojuegos
-
-        // Configurar el RecyclerView
         recyclerView.layoutManager = LinearLayoutManager(this)
-        videojuegoAdapter = VideojuegoAdapter(videojuegos, ::onEditVideojuego, ::onDeleteVideojuego)
+
+        // Configurar el adaptador
+        videojuegoAdapter = VideojuegoAdapter(videojuegos, { videojuego -> editVideojuego(videojuego) }, { videojuego -> deleteVideojuego(videojuego) })
         recyclerView.adapter = videojuegoAdapter
 
-        // Configurar el botón para añadir videojuegos
-        btnAdd.setOnClickListener {
-            // Redirigir a Menu para añadir un nuevo videojuego
-            startActivity(Intent(this, Menu::class.java))
+        // Cargar videojuegos desde VideojuegoManager
+        cargarVideojuegos()
+
+        // Botón para añadir un nuevo videojuego
+        val btnAddVideojuego: Button = findViewById(R.id.btnAdd) // Asegúrate de tener un botón en tu layout
+        btnAddVideojuego.setOnClickListener {
+            val intent = Intent(this, Menu::class.java).apply {
+                putExtra("ACCION", "AÑADIR")
+            }
+            startActivity(intent)
         }
     }
 
-    private fun onEditVideojuego(videojuego: Videojuego) {
-        VideojuegoManager.getInstance()
-        startActivity(Intent(this, Menu::class.java))
+    private fun cargarVideojuegos() {
+        // Limpia la lista antes de cargar
+        videojuegos.clear()
+        videojuegos.addAll(videojuegoManager.getVideojuegos()) // Carga la lista de videojuegos desde VideojuegoManager
+        videojuegoAdapter.notifyDataSetChanged() // Notifica al adaptador que los datos han cambiado
     }
 
-    private fun onDeleteVideojuego(videojuego: Videojuego) {
-        // Eliminar el videojuego del manager y actualizar la lista
-        VideojuegoManager.getInstance().eliminarVideojuego(videojuego.id) // Método para eliminar
-        videojuegos.remove(videojuego)
-        videojuegoAdapter.notifyDataSetChanged() // Notificar al adaptador sobre el cambio
-        Toast.makeText(this, "Videojuego eliminado.", Toast.LENGTH_SHORT).show()
+    private fun editVideojuego(videojuego: Videojuego) {
+        // Lógica para editar un videojuego
+        val intent = Intent(this, Menu::class.java).apply {
+            putExtra("VIDEOJUEGO_ID", videojuego.id) // Pasa el ID del videojuego que se va a editar
+        }
+        startActivity(intent)
+    }
+
+    private fun deleteVideojuego(videojuego: Videojuego) {
+        // Lógica para eliminar un videojuego
+        videojuegoManager.eliminarVideojuego(videojuego.id) // Usa el método de VideojuegoManager para eliminar el videojuego
+        cargarVideojuegos() // Recargar la lista después de eliminar
     }
 }

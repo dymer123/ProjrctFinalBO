@@ -13,6 +13,7 @@ import androidx.activity.enableEdgeToEdge
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.view.ViewCompat
 import androidx.core.view.WindowInsetsCompat
+import com.dam2024m8uf1_tfinal.drivera.Singletoon.Videojuego
 import com.dam2024m8uf1_tfinal.drivera.Singletoon.VideojuegoManager
 
 class Menu : AppCompatActivity() {
@@ -28,7 +29,6 @@ class Menu : AppCompatActivity() {
     private lateinit var btnSeguirEditando: Button
 
     private val videojuegoManager = VideojuegoManager.getInstance()
-
     private var currentVideojuegoId: Int? = null // ID del videojuego actual (si se está editando uno)
 
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -81,17 +81,22 @@ class Menu : AppCompatActivity() {
             startActivity(intent)
         }
 
-        // Si se pasa un ID de videojuego en el Intent, se carga
-        currentVideojuegoId = intent.getIntExtra("VIDEOJUEGO_ID", -1).takeIf { it != -1 }
-        cargarVideojuego(currentVideojuegoId)
+        // Verificar si se pasa un ID de videojuego o una acción
+        val accion = intent.getStringExtra("ACCION")
+        if (accion == "AÑADIR") {
+            añadirVideojuegoVacio() // Inicializar un videojuego vacío
+        } else {
+            currentVideojuegoId = intent.getIntExtra("VIDEOJUEGO_ID", -1).takeIf { it != -1 }
+            cargarVideojuego(currentVideojuegoId)
+        }
     }
 
     private fun cargarVideojuego(id: Int?) {
+        Log.d("Menu", "Cargando videojuego con ID: $id")
         id?.let {
             val detalles = videojuegoManager.mostrarDetalles(it)
-            // Aquí puedes cargar los detalles en las vistas si quieres
-            // Por ejemplo, usar setText en los EditText y seleccionar los Spinner
-            Toast.makeText(this, detalles, Toast.LENGTH_LONG).show() // Muestra detalles en un Toast
+            Log.d("Menu", "Detalles obtenidos: $detalles")
+            Toast.makeText(this, detalles, Toast.LENGTH_LONG).show()
         }
     }
 
@@ -112,13 +117,14 @@ class Menu : AppCompatActivity() {
 
         // Actualiza los atributos del videojuego
         currentVideojuegoId?.let { id ->
+            Log.d("Menu", "Actualizando videojuego con ID: $id")
             videojuegoManager.editarVideojuego(
                 id,
                 titulo,
                 genero,
                 null,
                 desarrollador,
-                clasificacionEdad,
+                null,
                 null,
                 null,
                 precio,
@@ -126,7 +132,7 @@ class Menu : AppCompatActivity() {
                 null,
                 null,
                 null,
-                if (esMultijugador) 1 else 0, // Enviado como Int (1 para true, 0 para false)
+                if (esMultijugador) 1 else 0,
                 null
             )
 
@@ -144,5 +150,12 @@ class Menu : AppCompatActivity() {
         } ?: run {
             Toast.makeText(this, "No se encontró un videojuego para mostrar detalles.", Toast.LENGTH_SHORT).show()
         }
+    }
+
+    // Método para añadir un videojuego vacío
+    private fun añadirVideojuegoVacio() {
+        val videojuegoVacio = Videojuego() // Crear un nuevo objeto Videojuego vacío
+        videojuegoManager.añadirVideojuegoVacio() // Usa el método del VideojuegoManager para añadir el videojuego vacío
+        currentVideojuegoId = videojuegoVacio.id // Asignar el ID del nuevo videojuego vacío
     }
 }

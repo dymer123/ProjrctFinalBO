@@ -20,7 +20,10 @@ public class Videojuego {
     private int duracionPromedio;
     private String motorGrafico;
 
-    // Constructor
+    // Constructors
+    public Videojuego() {
+        this.id = ++contadorId;
+    }
     public Videojuego(String titulo, String genero, String plataforma, String desarrollador, String publicador,
                       boolean esMultijugador, boolean modoHistoria, double precio, float calificacion,
                       String clasificacionEdad, Calendar fechaLanzamiento, int numeroJugadores,

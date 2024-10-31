@@ -17,7 +17,24 @@ public class VideojuegoManager {
 
     // Constructor privado
     private VideojuegoManager() {
-        videojuegos = new ArrayList<>(); // Inicializamos la lista
+        videojuegos = new ArrayList<>();
+        inicializarVideojuegos();
+    }
+    private void inicializarVideojuegos() {
+        añadirVideojuego("The Legend of Zelda: Breath of the Wild", "Aventura", "Switch", "Nintendo", "Nintendo",
+                true, true, 59.99, 10.0f, "+7", Calendar.getInstance(), 1, 50, "Basilisk");
+
+        añadirVideojuego("God of War", "Acción/Aventura", "PS4", "Santa Monica Studio", "Sony Interactive Entertainment",
+                true, true, 49.99, 9.5f, "+18", Calendar.getInstance(), 1, 30, "Santa Monica");
+
+        añadirVideojuego("Cyberpunk 2077", "RPG", "PC", "CD Projekt Red", "CD Projekt",
+                true, true, 59.99, 7.5f, "+18", Calendar.getInstance(), 1, 40, "REDengine 4");
+
+        añadirVideojuego("FIFA 21", "Deportes", "Multi", "EA Sports", "EA",
+                true, false, 59.99, 8.0f, "+3", Calendar.getInstance(), 4, 20, "Frostbite");
+
+        añadirVideojuego("Minecraft", "Sandbox", "Multi", "Mojang Studios", "Mojang",
+                true, false, 26.95, 9.0f, "TP", Calendar.getInstance(), 1, 100, "Java");
     }
 
     // Método estático para obtener la instancia única del Singleton
@@ -27,6 +44,8 @@ public class VideojuegoManager {
         }
         return instance;
     }
+
+
 
     // Método para añadir un nuevo videojuego
     public void añadirVideojuego(String titulo, String genero, String plataforma, String desarrollador, String publicador,
@@ -110,5 +129,11 @@ public class VideojuegoManager {
     public Videojuego getVideojuegoActual() {
         return this.videojuegoActual;
     }
+
+    public void añadirVideojuegoVacio() {
+        Videojuego videojuegoVacio = new Videojuego();  // Usa el constructor vacío
+        videojuegos.add(videojuegoVacio);  // Añade el videojuego vacío a la lista
+    }
+
 }
 

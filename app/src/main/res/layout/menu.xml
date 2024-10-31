@@ -1,0 +1,158 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/main"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:background="@drawable/fondo_menu"
+    tools:context="com.dam2024m8uf1_tfinal.drivera.Menu"
+    android:alpha="0.8">
+
+    <EditText
+        android:id="@+id/etTitulo"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Título"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#CCCCCC"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp"
+        android:background="@android:color/transparent"
+        android:focusable="true" />
+    <EditText
+        android:id="@+id/etPrecio"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Precio"
+        android:inputType="numberDecimal"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#CCCCCC"
+        app:layout_constraintTop_toBottomOf="@id/etTitulo"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp"
+        android:background="@android:color/transparent"
+        android:focusable="true" />
+    <EditText
+        android:id="@+id/tvGenero"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Género :"
+        android:textColor="#FFFFFF"
+        android:background="@android:color/transparent"
+        android:focusable="false"
+        android:textColorHint="#CCCCCC"
+        app:layout_constraintTop_toBottomOf="@id/etPrecio"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp" />
+
+    <Spinner
+        android:id="@+id/spGenero"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@android:color/holo_blue_dark"
+        app:layout_constraintTop_toBottomOf="@id/tvGenero"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="4dp" />
+
+    <EditText
+        android:id="@+id/etDesarrollador"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Desarrollador"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#CCCCCC"
+        app:layout_constraintTop_toBottomOf="@id/spGenero"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp"
+        android:background="@android:color/transparent"
+        android:focusable="true" />
+
+    <EditText
+        android:id="@+id/tvClasificacionEdad"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Clasificación de Edad :"
+        android:textColor="#FFFFFF"
+        android:background="@android:color/transparent"
+        android:focusable="false"
+        android:textColorHint="#CCCCCC"
+        app:layout_constraintTop_toBottomOf="@id/etDesarrollador"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp" />
+
+    <Spinner
+        android:id="@+id/spClasificacionEdad"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:background="@android:color/holo_blue_dark"
+        app:layout_constraintTop_toBottomOf="@id/tvClasificacionEdad"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="4dp" />
+
+    <EditText
+        android:id="@+id/etCalificacion"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:hint="Calificación (0-5)"
+        android:inputType="numberDecimal"
+        android:textColor="#FFFFFF"
+        android:textColorHint="#CCCCCC"
+        app:layout_constraintTop_toBottomOf="@id/spClasificacionEdad"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="8dp"
+        android:background="@android:color/transparent"
+        android:focusable="true" />
+
+    <CheckBox
+        android:id="@+id/cbMultijugador"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Multijugador"
+        android:textColor="#FFFFFF"
+        app:layout_constraintTop_toBottomOf="@id/etCalificacion"
+        app:layout_constraintStart_toStartOf="parent"
+        android:layout_marginTop="8dp" />
+
+    <Button
+        android:id="@+id/btnActualizar"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Actualizar Videojuego"
+        android:textColor="#FFFFFF"
+        app:layout_constraintTop_toBottomOf="@id/cbMultijugador"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp" />
+
+    <Button
+        android:id="@+id/btnMostrarDetalles"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Mostrar Detalles"
+        android:textColor="#FFFFFF"
+        app:layout_constraintTop_toBottomOf="@id/btnActualizar"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp" />
+
+    <Button
+        android:id="@+id/btnSeguirEditando"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Seguir Editando"
+        android:textColor="#FFFFFF"
+        app:layout_constraintTop_toBottomOf="@id/btnMostrarDetalles"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginTop="16dp" />
+</androidx.constraintlayout.widget.ConstraintLayout>
